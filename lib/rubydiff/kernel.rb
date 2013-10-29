@@ -7,6 +7,10 @@ class Diff
 		@type = type
 		@details = details
 	end
+
+	def to_s
+		"#{type}: #{details}"
+	end
 end
 
 class Diffs
@@ -28,7 +32,7 @@ class Diffs
 	end
 
 	def add_sub(subname,diffs)
-		@sub[subname]=diffs
+		@sub[subname]=diffs unless diffs.empty?
 	end
 
 	def subs
@@ -54,6 +58,11 @@ class Diffs
 			@diffs
 		end
 	end
+
+	def to_s
+		"main diffs: #{@diffs}, sub diffs: #{@sub}"
+	end
+
 end
 
 class HashDiffer
@@ -77,7 +86,7 @@ class ArrayDiffer
 			diffs.add(Diff.new(:different_size,"#{a.count} vs. #{b.count}"))
 		else
 			a.each_with_index do |el_a, i|
-				diffs.add_sub("el '#{i}'",Differ.diff(el_a,b[i]))
+				diffs.add_sub("index #{i}",Differ.diff(el_a,b[i]))
 			end
 		end
 		diffs

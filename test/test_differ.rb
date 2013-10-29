@@ -31,4 +31,32 @@ class TestDiffer < Test::Unit::TestCase
 		assert_equal 1,diffs.diffs(:not_the_same).count
 	end	
 
+	def test_array_diff_size
+		diffs = RubyDiff::Differ.diff([1,2,3],[1,2])
+		assert_equal 1,diffs.size
+		assert_equal 1,diffs.diffs(:different_size).count		
+	end
+
+	def test_array_diff_element
+		diffs = RubyDiff::Differ.diff([1,2,3],[1,2,4])
+		assert_equal 1,diffs.size
+		assert_equal 1,diffs.subs.count
+		assert_equal 1,diffs.sub('index 2').size
+		assert_equal 1,diffs.sub('index 2').diffs(:not_the_same).count		
+	end	
+
+	def test_hash_diff_keys
+		diffs = RubyDiff::Differ.diff({1=>'a',2=>'b',3=>'c'},{1=>'a',2=>'b'})
+		assert_equal 1,diffs.size
+		assert_equal 1,diffs.diffs(:different_keys).count		
+	end	
+
+	def test_hash_diff_element
+		diffs = RubyDiff::Differ.diff({1=>'a',2=>'b',3=>'c'},{1=>'a',2=>'b',3=>'d'})
+		assert_equal 1,diffs.size
+		assert_equal 1,diffs.subs.count
+		assert_equal 1,diffs.sub("key '3'").size
+		assert_equal 1,diffs.sub("key '3'").diffs(:not_the_same).count		
+	end	
+
 end
