@@ -1,5 +1,2 @@
 require "rubydiff/version"
-
-module Rubydiff
-  # Your code goes here...
-end
+require "rubydiff/kernel"
