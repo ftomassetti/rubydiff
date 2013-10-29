@@ -59,4 +59,9 @@ class TestDiffer < Test::Unit::TestCase
 		assert_equal 1,diffs.sub("key '3'").diffs(:not_the_same).count		
 	end	
 
+	def test_hash_diff_element_pretty_to_s
+		diffs = RubyDiff::Differ.diff({1=>'a',2=>'b',3=>'c'},{1=>'a',2=>'b',3=>'d'})	
+		assert_equal "key '3' ->\n  [not_the_same] c vs d\n",diffs.pretty_to_s			
+	end
+
 end

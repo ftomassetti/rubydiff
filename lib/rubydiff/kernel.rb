@@ -9,7 +9,7 @@ class Diff
 	end
 
 	def to_s
-		"#{type}: #{details}"
+		"[#{type}] #{details}"
 	end
 end
 
@@ -61,6 +61,18 @@ class Diffs
 
 	def to_s
 		"main diffs: #{@diffs}, sub diffs: #{@sub}"
+	end
+
+	def pretty_to_s(ntabs=0)
+		tab = "  "
+		s = ""
+		space = tab*ntabs
+		@diffs.each {|d| s+="#{space}#{d}\n"}
+		@sub.each do |k,subdiff|
+			s+="#{space}#{k} ->\n"
+			s+=subdiff.pretty_to_s(ntabs+1)
+		end
+		s
 	end
 
 end
