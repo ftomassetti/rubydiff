@@ -11,6 +11,10 @@ class Diff
 	def to_s
 		"[#{type}] #{details}"
 	end
+
+	def inspect
+		to_s
+	end
 end
 
 class Diffs
@@ -57,6 +61,10 @@ class Diffs
 		else
 			@diffs
 		end
+	end
+
+	def inspect
+		to_s
 	end
 
 	def to_s

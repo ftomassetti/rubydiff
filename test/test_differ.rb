@@ -1,5 +1,4 @@
-require "test/unit"
-require "rubydiff"
+require 'helper'
 
 class TestDiffer < Test::Unit::TestCase
 
@@ -58,6 +57,11 @@ class TestDiffer < Test::Unit::TestCase
 		assert_equal 1,diffs.sub("key '3'").size
 		assert_equal 1,diffs.sub("key '3'").diffs(:not_the_same).count		
 	end	
+
+	def test_hash_diff_to_s
+		diffs = RubyDiff::Differ.diff({1=>'a',2=>'b',3=>'c'},{1=>'a',2=>'b',3=>'d'})
+		assert_equal "main diffs: [], sub diffs: {\"key '3'\"=>main diffs: [[not_the_same] c vs d], sub diffs: {}}",diffs.to_s		
+	end
 
 	def test_hash_diff_element_pretty_to_s
 		diffs = RubyDiff::Differ.diff({1=>'a',2=>'b',3=>'c'},{1=>'a',2=>'b',3=>'d'})	
