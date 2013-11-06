@@ -8,6 +8,21 @@ class TestDiffer < Test::Unit::TestCase
 		assert_equal 1,diffs.diffs(:different_class).count
 	end
 
+	def test_same_boolean
+		assert RubyDiff::Differ.diff(true,true).empty?
+		assert RubyDiff::Differ.diff(false,false).empty?
+	end
+
+	def test_different_boolean
+		diffs = RubyDiff::Differ.diff(true, false)
+		assert_equal 1,diffs.size
+		assert_equal 1,diffs.diffs(:not_the_same).count
+
+		diffs = RubyDiff::Differ.diff(false, true)
+		assert_equal 1,diffs.size
+		assert_equal 1,diffs.diffs(:not_the_same).count				
+	end
+
 	def test_same_float
 		diffs = RubyDiff::Differ.diff(1.1,1.1)
 		assert diffs.empty?

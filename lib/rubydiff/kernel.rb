@@ -136,16 +136,20 @@ end
 module Differ
 
 	@@specific_differs = {}
-	@@specific_differs[Fixnum]   = BasicDiffer.new
-	@@specific_differs[Float]    = BasicDiffer.new
-	@@specific_differs[String]   = BasicDiffer.new
-	@@specific_differs[Array]    = ArrayDiffer.new
-	@@specific_differs[Hash]     = HashDiffer.new
+	@@specific_differs[Fixnum]     = BasicDiffer.new
+	@@specific_differs[Float]      = BasicDiffer.new
+	@@specific_differs[String]     = BasicDiffer.new
+	@@specific_differs[FalseClass] = BasicDiffer.new
+	@@specific_differs[TrueClass]  = BasicDiffer.new
+	@@specific_differs[Array]      = ArrayDiffer.new
+	@@specific_differs[Hash]       = HashDiffer.new
 
 	def self.diff(a,b)
 		diffs = Diffs.new
 		if (a==nil) || (b==nil)
 			diffs.add_all(NilDiffer.new.diff(a,b))
+		elsif is_bool?(a) && is_bool?(b)
+			diffs.add_all(BasicDiffer.new.diff(a,b))
 		elsif a.class!=b.class
 			diffs.add(Diff.new(:different_class, "#{a.class},#{b.class}"))
 		else
@@ -154,6 +158,10 @@ module Differ
 			diffs.add_all(differ.diff(a,b))
 		end
 		diffs
+	end
+
+	def self.is_bool?(x)
+		x.is_a?(FalseClass) || x.is_a?(TrueClass)
 	end
 
 	def self.differ_for(clazz)
