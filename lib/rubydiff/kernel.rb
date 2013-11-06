@@ -137,13 +137,14 @@ module Differ
 
 	@@specific_differs = {}
 	@@specific_differs[Fixnum]   = BasicDiffer.new
+	@@specific_differs[Float]    = BasicDiffer.new
 	@@specific_differs[String]   = BasicDiffer.new
 	@@specific_differs[Array]    = ArrayDiffer.new
 	@@specific_differs[Hash]     = HashDiffer.new
 
 	def self.diff(a,b)
 		diffs = Diffs.new
-		if a==nil or b==nil
+		if (a==nil) || (b==nil)
 			diffs.add_all(NilDiffer.new.diff(a,b))
 		elsif a.class!=b.class
 			diffs.add(Diff.new(:different_class, "#{a.class},#{b.class}"))

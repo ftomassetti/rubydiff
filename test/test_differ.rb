@@ -8,6 +8,17 @@ class TestDiffer < Test::Unit::TestCase
 		assert_equal 1,diffs.diffs(:different_class).count
 	end
 
+	def test_same_float
+		diffs = RubyDiff::Differ.diff(1.1,1.1)
+		assert diffs.empty?
+	end
+
+	def test_different_float
+		diffs = RubyDiff::Differ.diff(1.1,1.2)
+		assert_equal 1,diffs.size
+		assert_equal 1,diffs.diffs(:not_the_same).count
+	end	
+
 	def test_same_fixnum
 		diffs = RubyDiff::Differ.diff(1,1)
 		assert diffs.empty?
@@ -24,7 +35,7 @@ class TestDiffer < Test::Unit::TestCase
 		assert diffs.empty?
 	end
 
-	def test_different_fixnum
+	def test_different_string
 		diffs = RubyDiff::Differ.diff("ciao","bye")
 		assert_equal 1,diffs.size
 		assert_equal 1,diffs.diffs(:not_the_same).count
