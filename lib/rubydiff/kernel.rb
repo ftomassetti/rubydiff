@@ -121,17 +121,31 @@ class BasicDiffer
 	end
 end
 
+class NilDiffer
+	def diff(a,b)
+		diffs = Diffs.new
+		if (a==nil) && (b!=nil)
+			diffs.add(Diff.new(:one_is_nil,"a is nil while b is not (#{b})"))
+		elsif (a!=nil) && (b==nil)
+			diffs.add(Diff.new(:one_is_nil,"b is nil while a is not (#{a})"))
+		end		
+		diffs
+	end
+end
+
 module Differ
 
 	@@specific_differs = {}
-	@@specific_differs[Fixnum] = BasicDiffer.new
-	@@specific_differs[String] = BasicDiffer.new
-	@@specific_differs[Array] = ArrayDiffer.new
-	@@specific_differs[Hash] = HashDiffer.new
+	@@specific_differs[Fixnum]   = BasicDiffer.new
+	@@specific_differs[String]   = BasicDiffer.new
+	@@specific_differs[Array]    = ArrayDiffer.new
+	@@specific_differs[Hash]     = HashDiffer.new
 
 	def self.diff(a,b)
 		diffs = Diffs.new
-		if a.class!=b.class
+		if a==nil or b==nil
+			diffs.add_all(NilDiffer.new.diff(a,b))
+		elsif a.class!=b.class
 			diffs.add(Diff.new(:different_class, "#{a.class},#{b.class}"))
 		else
 			differ = differ_for(a.class)

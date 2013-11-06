@@ -68,4 +68,18 @@ class TestDiffer < Test::Unit::TestCase
 		assert_equal "key '3' ->\n  [not_the_same] c vs d\n",diffs.pretty_to_s			
 	end
 
+	def test_a_is_nil
+		diffs = RubyDiff::Differ.diff(nil,{1=>'a',2=>'b',3=>'d'})
+		assert_equal 1,diffs.size
+		assert_equal 0,diffs.subs.count
+		assert_equal 1,diffs.diffs(:one_is_nil).count
+	end
+
+	def test_b_is_nil
+		diffs = RubyDiff::Differ.diff({1=>'a',2=>'b',3=>'d'},nil)
+		assert_equal 1,diffs.size
+		assert_equal 0,diffs.subs.count
+		assert_equal 1,diffs.diffs(:one_is_nil).count
+	end	
+
 end
